@@ -1,0 +1,25 @@
+{%  extends 'shop/main.html' %}
+{% load static %}
+{% block content %}
+<form action="" method="post">
+{%  csrf_token %}
+    <div class="container" >
+        <div class="row">
+            <div class="col">
+                {%  for image in images %}
+                <img src="{% static image.path %}" class="rounded-start"  width="200px" height="200px">
+                {% endfor %}
+               <h3>{{ product.name }} Cena: {{ product.price }} </h3>
+                <ol> {{ product.description }}</ol>
+            </div>
+            <div class="col-2">
+                 <button type="submit" class="btn-primary text-center" >Dodaj do koszyka</button>
+            </div>
+        </div>
+
+        <div class="row text-center">
+         <a href ={% url 'product_list' %}  >Powrót do listy produktów</a>
+        </div>
+    </div>
+</form>
+{% endblock %}

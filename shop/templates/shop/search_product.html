@@ -1,0 +1,30 @@
+{% extends 'shop/main.html' %}
+
+{%  block content %}
+<form action="" method="post">
+    {%  csrf_token %}
+    <div class="container">
+        <div class = 'row'>
+            <div class="col">
+                        {{ form.as_p }}
+            <button type="submit" class="btn-success"> Wyszukaj </button>
+            </div>
+        </div>
+        <div class="row">
+            <h3> Wybrane przedmioty po nazwie</h3>
+            {%  for product in products  %}
+            <div class="col-8">
+                <a href="http://127.0.0.1:8000/menu/product/{{ product.pk }}" >{{ product.name }}</a>
+            </div>
+            {% endfor %}
+        <h3> Wybrane przedmioty po kategorii</h3>
+        {% for product in product_by_category %}
+            <div class="col-8">
+                <a href="http://127.0.0.1:8000/menu/product/{{ product.pk }}" >{{ product.name }}</a>
+            </div>
+        {%  endfor %}
+        </div>
+    <a type="button" class="bg-body" href="{% url 'product_list' %}">Powrót do listy produktów</a>
+    </div>
+</form>
+{%  endblock %}

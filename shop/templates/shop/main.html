@@ -1,0 +1,42 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link   rel="stylesheet"  href= {% static 'css/bootstrap.css' %}>
+    <style>
+        .container {
+            background-color: #bcbebf;
+        }
+
+    </style>
+    <img src='{% static 'logo.png' %}' width="100px" height="100px">
+</head>
+<body>
+<footer>
+    <a href={% url 'logout' %} > Wyloguj się!</a>
+</footer>
+<a href="{%  url 'basket'%}"> Przejdz do koszyka</a>
+{% block content %}
+
+
+
+
+    <h1 class="text-center">Witaj na stronie umożliwiającej zakupy internetowe </h1>
+   <div class =container>
+        <a class="align-content-center text-center" href="{%  url 'login' %}"> Zaloguj się!</a> lub <a class='align-content-center align-items-center' href="{%  url 'add_user'%}"> Zarejestruj się! </a>
+   </div>
+
+
+{% endblock %}
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+</script>
+<script src={%  static 'js/bootstrap.js' %}>
+</script>
+</body>
+<footer > Zalogowany jako: {{ user.username }}  </footer>
+</html>

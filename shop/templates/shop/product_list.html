@@ -1,0 +1,22 @@
+{% extends 'shop/main.html' %}
+{% load static %}
+
+{% block content %}
+{% for product in arr %}
+    <div class="container my-5">
+        <div class = 'row'>
+            <div class="col-2">
+                <img src=" {% static product.1.0.path %} " width="100px" height="100px">
+            </div>
+            <div class="col-8">
+                <h2>{{ product.0.name}}</h2>
+                Cena:{{ product.0.price }}
+            </div>
+            <div class="col-2">
+               <a href="http://127.0.0.1:8000/menu/product/{{ product.0.pk}}"  type="button" class="'btn btn-info" >Szczegóły</a>
+                <a href=""  type="button" name="add" class= "btn btn-primary">Dodaj do koszyka</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% endblock %}

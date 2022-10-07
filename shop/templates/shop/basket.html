@@ -1,0 +1,18 @@
+{% extends 'shop/main.html' %}
+{%  block content %}
+<form action="" method="post">
+{{ crsf_token }}
+    <div class="container">
+        <h2> Twój koszyk </h2>
+        <div class="row">
+            {%  for product in products %}
+                <ul>{{ product.name }}{{ product.price }}</ul>
+            {%  endfor %}
+        <div class="row">
+            <h2> Cena: {{ price }} zł</h2>
+        </div>
+        </div>
+    </div>
+    {{ form.as_p }}
+</form>
+{% endblock %}
