@@ -1,0 +1,9 @@
+{%  extends 'shop/main.html' %}
+{%  block content %}
+    <form action="" method="post">
+     {%  csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Zamów</button>
+        <a href="{%  url 'basket' %}">Powrót do koszyka</a>
+    </form>
+{%  endblock %}
