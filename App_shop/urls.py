@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from shop.views import ProductAddView, ProductAllView, SearchProductView, ProductDetailsView, \
-    UserView, AddUserView, MenuView, LogoutView, BasketView
+    UserView, AddUserView, MenuView, LogoutView, BasketView, delete_product, DeliveryPaymentView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,4 +29,6 @@ urlpatterns = [
     path('menu', MenuView.as_view(), name='menu'),
     path('logout', LogoutView.as_view(), name='logout'),
     path('menu/basket', BasketView.as_view(), name='basket'),
+    path('menu/basket/delete_product/<int:id>', delete_product, name = 'delete_product'),
+    path('menu/basket/delivery',DeliveryPaymentView.as_view(), name = 'delivery')
 ]

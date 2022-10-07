@@ -7,8 +7,7 @@ User = get_user_model()
 
 PAYMENT = [
     (1, "Za pobraniem"),
-    (2, "Odbiór osobisty"),
-    (3, "Przelew")
+    (2, "Przelew")
 ]
 STATUS = [
     (1, 'W trakcie przygotowania'),

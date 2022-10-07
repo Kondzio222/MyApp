@@ -1,18 +1,23 @@
 {% extends 'shop/main.html' %}
 {%  block content %}
 <form action="" method="post">
-{{ crsf_token }}
+{% csrf_token %}
     <div class="container">
         <h2> Twój koszyk </h2>
         <div class="row">
             {%  for product in products %}
-                <ul>{{ product.name }}{{ product.price }}</ul>
+                <div class="col-10">
+                    <ul>{{ product.0.name }}:{{ product.0.price }} zł</ul>
+                </div>
+                <div class="col-10">
+                    <a href=" http://127.0.0.1:8000/menu/basket/delete_product/{{ product.1 }} " class="btn-danger">Usuń z koszyka</a>
+                </div>
             {%  endfor %}
         <div class="row">
             <h2> Cena: {{ price }} zł</h2>
         </div>
         </div>
     </div>
-    {{ form.as_p }}
 </form>
+    <a href={% url 'delivery'%}>Przejdź do płatności i dostawy</a>
 {% endblock %}

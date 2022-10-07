@@ -5,6 +5,8 @@
     {% csrf_token %}
     {{form.as_ul}}
     <input type='submit' value = 'Zaloguj się'>
+    <a href="{% url 'menu' %}">Menu</a>
+    <a href="{% url 'add_user' %}">Zarejestruj się</a>
 </form>
 
 

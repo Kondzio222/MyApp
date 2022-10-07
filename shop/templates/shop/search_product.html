@@ -10,13 +10,6 @@
             <button type="submit" class="btn-success"> Wyszukaj </button>
             </div>
         </div>
-        <div class="row">
-            <h3> Wybrane przedmioty po nazwie</h3>
-            {%  for product in products  %}
-            <div class="col-8">
-                <a href="http://127.0.0.1:8000/menu/product/{{ product.pk }}" >{{ product.name }}</a>
-            </div>
-            {% endfor %}
         <h3> Wybrane przedmioty po kategorii</h3>
         {% for product in product_by_category %}
             <div class="col-8">

@@ -16,7 +16,6 @@ class ProductAddForm(forms.Form):
 
 
 class SearchProductForm(forms.Form):
-    search_name = forms.CharField(max_length=64, required=False)
     category = forms.ModelChoiceField(queryset=Category.objects.all(), to_field_name='id')
 
 
@@ -59,6 +58,6 @@ class UserCreateForm(forms.ModelForm):
             raise ValidationError("Passwords must be the same!!!")
 
 
-class DeliveryForm(forms.Form):
+class PaymentForm(forms.Form):
     address = forms.CharField()
     payment = forms.ChoiceField(choices=PAYMENT)
