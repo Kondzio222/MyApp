@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 from django.db.utils import IntegrityError
 
-from shop.models import Products, Users, Category, Delivery
+from shop.models import Products, Users, Category, Delivery,Basket
 
 
 
@@ -48,7 +48,7 @@ class ProductAllViewTest(TestCase):
         self.assertTemplateUsed(response, 'shop/product_list.html')
 
 
-    def test_list_products_multiple_producst(self):
+    def test_list_products_multiple_products(self):
         response = self.client.get('/menu/product_list')
 
         self.assertEqual(len(response.context[0]['arr']), self.number_of_products)
@@ -127,11 +127,11 @@ class ProductDetailsViewTest(TestCase):
         logged_in = client.login(username='test_user', password='test_pass')
         self.assertTrue(logged_in)
 
-        response = client.get('/menu/product/1')
+        response = client.get('/menu/product/7')
         self.assertEqual(response.status_code, 200)
 
         product_details = response.context[0]['product']
-        breakpoint()
+
         self.assertEqual(product_details.name, self.test_product['name'])
         self.assertEqual(product_details.price, self.test_product['price'])
         self.assertEqual(product_details.number_of_items, self.test_product['number_of_items'])
@@ -140,15 +140,16 @@ class ProductDetailsViewTest(TestCase):
         client = Client()
         logged_in = client.login(username='test_user', password='test_pass')
         self.assertTrue(logged_in)
+        response = client.post('/menu/product/7')
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, '/menu/product_list')
 
-        response = client.post('/menu/product/1')
-        self.assertEqual(response.status_code, 200)
 
-        product_in_basket = response.context[0]['product'].product
+        created_product = Products.objects.last()
 
-        self.assertEqual(product_in_basket.name, self.test_product['name'])
-        self.assertEqual(product_in_basket.price, self.test_product['price'])
-        self.assertEqual(product_in_basket.number_of_items, self.test_product['number_of_items'])
+        self.assertEqual(created_product.name, self.test_product['name'])
+        self.assertEqual(created_product.price, self.test_product['price'])
+        self.assertEqual(created_product.number_of_items, self.test_product['number_of_items'])
 
 class UserViewTest(TestCase):
 
@@ -192,4 +193,60 @@ class CreateUserViewTest(TestCase):
         response =self.client.get('/menu/add_user')
 
         self.assertEqual(response.status_code,200)
-        self.assertTemplateUsed()
+        self.assertTemplateUsed(response, 'shop/add_user.html')
+
+    def test_add_user(self):
+        test_user = {
+            'username': 'sume_test_user',
+            'password1': 'testpassword',
+            'password2': 'testpassword',
+            'first_name': 'Jan',
+            'last_name': 'Kowalski'
+        }
+
+        response = self.client.post('/menu/add_user', test_user)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, '/menu/login')
+
+        user = User.objects.last()
+        self.assertEqual(user.username, 'sume_test_user')
+        self.assertEqual(user.first_name, 'Jan')
+        self.assertEqual(user.last_name, 'Kowalski')
+
+class BasketViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        user = User.objects.create(username='test_user')
+        user.set_password('test_pass')
+        user.save()
+
+
+    def test_template(self):
+        response = self.client.get('/menu/basket')
+
+        self.assertEqual(response.status_code,302)
+        self.assertRedirects(response,'/menu/login?next=/menu/basket')
+
+    def test_get_page_with_login(self):
+        client = Client()
+        logged_in = client.login(username='test_user', password='test_pass')
+        self.assertTrue(logged_in)
+        Users.objects.create(user_id=User.objects.last().id)
+        response = client.get('/menu/basket')
+        self.assertEqual(response.status_code, 200)
+
+
+class DeliveryViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        user = User.objects.create(username='test_user')
+        user.set_password('test_pass')
+        user.save()
+
+    def test_template(self):
+        response = self.client.get('/menu/basket/delivery')
+
+        self.assertEqual(response.status_code,302)
+        self.assertRedirects(response,'/menu/login?next=/menu/basket/delivery')
+
+

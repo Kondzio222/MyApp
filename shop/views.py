@@ -177,7 +177,10 @@ class BasketView(LoginRequiredMixin, View):
     template_name = 'shop/basket.html'
 
     def get(self, request, *args, **kwargs):
-        my_basket = Basket.objects.filter(status=1, my_user=Users.objects.get(user_id=request.user.id)).values()
+        choose_user = Users.objects.filter(user=request.user).values()
+        if len(choose_user) == 0:
+            choose_user = Users.objects.create(user=request.user)
+        my_basket = Basket.objects.filter(status=1, my_user=choose_user[0]['id']).values()
         if len(my_basket) == 0:
             return HttpResponse("Nie masz jeszcze utworzonego koszyka. Dodaj produkt by utworzyć koszyk")
         basket_id = my_basket[0]['id']
