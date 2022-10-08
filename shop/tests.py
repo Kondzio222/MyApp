@@ -213,6 +213,28 @@ class CreateUserViewTest(TestCase):
         self.assertEqual(user.first_name, 'Jan')
         self.assertEqual(user.last_name, 'Kowalski')
 
+class LogoutViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        user = User.objects.create(username='test_user')
+        user.set_password('test_pass')
+        user.save()
+
+    def test_check_is_login(self):
+        client = Client()
+        logged_in = client.login(username='test_user', password='test_pass')
+        self.assertTrue(logged_in)
+
+    def test_logout(self):
+        client = Client()
+        logged_in = client.login(username='test_user', password='test_pass')
+
+        response = client.get('/logout')
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response,'/menu/login')
+
+
+
 class BasketViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -243,10 +265,19 @@ class DeliveryViewTest(TestCase):
         user.set_password('test_pass')
         user.save()
 
-    def test_template(self):
+    def test_redirect_without_login(self):
         response = self.client.get('/menu/basket/delivery')
 
         self.assertEqual(response.status_code,302)
         self.assertRedirects(response,'/menu/login?next=/menu/basket/delivery')
 
+    def test_get_page_with_login(self):
+        client = Client()
+        logged_in = client.login(username='test_user', password='test_pass')
+        self.assertTrue(logged_in)
+        user = Users.objects.create(user_id=User.objects.last().id)
+        delivery = Delivery.objects.create(address="Wroclaw", payment_method=1)
+        Basket.objects.create(my_user_id=user.id, delivery_method_id=delivery.id, status=1)
 
+        response = client.get('/menu/basket/delivery')
+        self.assertEqual(response.status_code,200)

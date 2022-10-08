@@ -5,7 +5,7 @@ from django.views.generic import FormView, CreateView
 from django.urls import reverse_lazy
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout, get_user_model
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,Permission
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -115,7 +115,7 @@ class ProductDetailsView(LoginRequiredMixin, View):
                 choose_user = Users.objects.filter(user=user).values()
             choose_product = Products.objects.get(pk=kwargs['id'])
             choose_basket = Basket.objects.filter(status=1, my_user_id=choose_user[0]['id']).values()
-            delivery = Delivery.objects.get(pk=1)
+            delivery = Delivery.objects.create(address='Nie ma',payment_method=1)
             if len(choose_basket) == 0:
                 new_basket = Basket.objects.create(status=1, my_user=Users.objects.get(pk=choose_user[0]['id']),
                                                    delivery_method=delivery)
